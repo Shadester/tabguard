@@ -1,6 +1,6 @@
-# LockTab - Chrome/Brave Extension
+# TabGuard - Chrome/Brave Extension
 
-Lock tabs to prevent closing or navigation away from the current page.
+Guard your tabs from closing or navigating away from the current page.
 
 ## Features
 

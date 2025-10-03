@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "LockTab",
+  "name": "TabGuard",
   "version": "1.0.0",
-  "description": "Lock tabs to prevent closing or navigation",
+  "description": "Guard your tabs from closing or navigating away from the current page",
   "permissions": [
     "tabs",
     "storage",
