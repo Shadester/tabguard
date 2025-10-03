@@ -139,6 +139,8 @@ function toggleLock(tabId, lockType, url) {
 
   if (lockType === 'page') {
     lockedTabs[tabId].pageLock = !lockedTabs[tabId].pageLock;
+    // Notify content script about page lock change
+    notifyContentScript(tabId, lockedTabs[tabId].pageLock);
   } else if (lockType === 'tab') {
     lockedTabs[tabId].tabLock = !lockedTabs[tabId].tabLock;
   }
@@ -156,10 +158,22 @@ function toggleLock(tabId, lockType, url) {
 }
 
 function unlockTab(tabId) {
+  // Notify content script to disable page lock
+  notifyContentScript(tabId, false);
+
   delete lockedTabs[tabId];
   saveLocks();
   updateTabIndicator(tabId);
   removeTabTitlePrefix(tabId);
+}
+
+function notifyContentScript(tabId, pageLockEnabled) {
+  chrome.tabs.sendMessage(tabId, {
+    action: 'setPageLock',
+    enabled: pageLockEnabled
+  }).catch(() => {
+    // Ignore errors if content script not ready
+  });
 }
 
 function saveLocks() {
@@ -214,6 +228,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       saveLocks();
       updateTabIndicator(request.tabId);
       updateTabTitle(request.tabId, lockedTabs[request.tabId]);
+      notifyContentScript(request.tabId, true);
       sendResponse({ pageLock: true, tabLock: true });
     }
   } else if (request.action === 'toggleLock') {
@@ -226,6 +241,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.action === 'unlockAll') {
     unlockTab(request.tabId);
     sendResponse({ pageLock: false, tabLock: false });
+  } else if (request.action === 'checkPageLock') {
+    // Content script checking if page is locked
+    const tabId = sender.tab?.id;
+    const lock = lockedTabs[tabId];
+    sendResponse({
+      pageLock: lock?.pageLock || false
+    });
   }
   return true;
 });
