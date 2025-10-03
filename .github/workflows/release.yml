@@ -23,6 +23,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Update manifest.json version
+        run: |
+          # Remove 'v' prefix from version if present
+          VERSION=${{ inputs.version }}
+          VERSION=${VERSION#v}
+
+          # Update version in manifest.json
+          sed -i 's/"version": "[^"]*"/"version": "'"$VERSION"'"/' manifest.json
+
+          # Commit the change
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add manifest.json
+          git commit -m "Bump version to $VERSION"
+          git push
+
       - name: Create release package
         run: |
           zip -r tabguard-${{ inputs.version }}.zip . \
