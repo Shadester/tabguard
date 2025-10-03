@@ -13,13 +13,12 @@ Guard your tabs from closing or navigating away from the current page.
 
 ## Installation
 
-### Option 1: Install from Source (Recommended for now)
+### Option 1: Download from GitHub Releases (Easiest)
 
-1. **Download or clone this repository**
-   ```bash
-   git clone https://github.com/yourusername/locktab.git
-   cd locktab
-   ```
+1. **Download the latest release**
+   - Go to [Releases](https://github.com/Shadester/tabguard/releases/latest)
+   - Download `tabguard-v1.0.0.zip`
+   - Extract the zip file
 
 2. **Generate icons** (one-time setup)
    - Open `icons/generate-icons.html` in your browser
@@ -33,9 +32,18 @@ Guard your tabs from closing or navigating away from the current page.
    - Open `chrome://extensions/` (or `brave://extensions/`)
    - Enable "Developer mode" (toggle in top-right)
    - Click "Load unpacked"
-   - Select the `locktab` folder
+   - Select the extracted `tabguard` folder
 
-### Option 2: Chrome Web Store (Coming Soon)
+### Option 2: Clone from Source
+
+```bash
+git clone https://github.com/Shadester/tabguard.git
+cd tabguard
+```
+
+Then follow steps 2-3 above.
+
+### Option 3: Chrome Web Store (Coming Soon)
 *Extension will be published to Chrome Web Store for easy one-click installation*
 
 ## Usage
@@ -81,4 +89,4 @@ Pull requests welcome! To contribute:
 
 ## License
 
-MIT License - feel free to use and modify
+MIT License - see [LICENSE](LICENSE) file for details
