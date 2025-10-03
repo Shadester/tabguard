@@ -20,15 +20,7 @@ Guard your tabs from closing or navigating away from the current page.
    - Download `tabguard-v1.0.0.zip`
    - Extract the zip file
 
-2. **Generate icons** (one-time setup)
-   - Open `icons/generate-icons.html` in your browser
-   - Right-click each canvas and save as PNG:
-     - `icon16.png`
-     - `icon48.png`
-     - `icon128.png`
-   - Save all in the `icons/` folder
-
-3. **Load extension in Chrome/Brave**
+2. **Load extension in Chrome/Brave**
    - Open `chrome://extensions/` (or `brave://extensions/`)
    - Enable "Developer mode" (toggle in top-right)
    - Click "Load unpacked"
@@ -41,7 +33,7 @@ git clone https://github.com/Shadester/tabguard.git
 cd tabguard
 ```
 
-Then follow steps 2-3 above.
+Then follow step 2 above.
 
 ### Option 3: Chrome Web Store (Coming Soon)
 *Extension will be published to Chrome Web Store for easy one-click installation*
