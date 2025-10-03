@@ -1,0 +1,58 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.1)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create release package
+        run: |
+          zip -r tabguard-${{ inputs.version }}.zip . \
+            -x "*.git*" \
+            -x ".DS_Store" \
+            -x "*.zip" \
+            -x ".github/*"
+
+      - name: Create Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ inputs.version }} \
+            tabguard-${{ inputs.version }}.zip \
+            --title "TabGuard ${{ inputs.version }}" \
+            ${{ inputs.prerelease && '--prerelease' || '' }} \
+            --notes "## Installation
+
+          1. Download \`tabguard-${{ inputs.version }}.zip\` below
+          2. Extract the zip file
+          3. Open \`chrome://extensions/\` (or \`brave://extensions/\`)
+          4. Enable \"Developer mode\" (toggle in top-right)
+          5. Click \"Load unpacked\"
+          6. Select the extracted folder
+
+          ## Browser Compatibility
+
+          - ✅ Google Chrome (Manifest V3)
+          - ✅ Brave Browser
+          - ✅ Microsoft Edge
+          - ✅ Any Chromium-based browser
+
+          See [README](https://github.com/${{ github.repository }}) for full feature list and usage instructions."
