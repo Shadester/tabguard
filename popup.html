@@ -7,16 +7,34 @@
 </head>
 <body>
   <div class="container">
-    <h2>TabGuard</h2>
-
-    <button id="lockBoth" class="btn btn-lock-both">🔒⛔ Lock Both</button>
-
-    <div class="tabs">
-      <button class="tab-button active" data-tab="locks">Locks</button>
-      <button class="tab-button" data-tab="settings">Settings</button>
+    <div class="header">
+      <h2>TabGuard</h2>
+      <button id="helpBtn" class="help-btn" aria-label="Show keyboard shortcuts" title="Keyboard Shortcuts">⌨️</button>
     </div>
 
-    <div class="tab-content active" id="locks-tab">
+    <div id="helpTooltip" class="help-tooltip hidden">
+      <h3>Keyboard Shortcuts</h3>
+      <div class="shortcut-list">
+        <div class="shortcut-item">
+          <kbd>Ctrl+Shift+L</kbd>
+          <span>Toggle Page Lock</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Ctrl+Shift+K</kbd>
+          <span>Toggle Tab Lock</span>
+        </div>
+      </div>
+      <small>Customize in chrome://extensions/shortcuts</small>
+    </div>
+
+    <button id="lockBoth" class="btn btn-lock-both" aria-label="Lock both page and tab">🔒⛔ Lock Both</button>
+
+    <div class="tabs" role="tablist" aria-label="Main navigation">
+      <button class="tab-button active" role="tab" aria-selected="true" aria-controls="locks-tab" data-tab="locks" id="locks-tab-btn">Locks</button>
+      <button class="tab-button" role="tab" aria-selected="false" aria-controls="settings-tab" data-tab="settings" id="settings-tab-btn">Settings</button>
+    </div>
+
+    <div class="tab-content active" id="locks-tab" role="tabpanel" aria-labelledby="locks-tab-btn">
       <div class="lock-controls">
         <div class="lock-item">
           <div class="lock-info">
@@ -26,7 +44,7 @@
               <small>Prevents navigation</small>
             </div>
           </div>
-          <button id="togglePageLock" class="btn-toggle" data-active="false">
+          <button id="togglePageLock" class="btn-toggle" data-active="false" role="switch" aria-checked="false" aria-label="Toggle Page Lock">
             <span class="toggle-track">
               <span class="toggle-thumb"></span>
             </span>
@@ -41,7 +59,7 @@
               <small>Prevents closing</small>
             </div>
           </div>
-          <button id="toggleTabLock" class="btn-toggle" data-active="false">
+          <button id="toggleTabLock" class="btn-toggle" data-active="false" role="switch" aria-checked="false" aria-label="Toggle Tab Lock">
             <span class="toggle-track">
               <span class="toggle-thumb"></span>
             </span>
@@ -50,7 +68,7 @@
       </div>
     </div>
 
-    <div class="tab-content" id="settings-tab">
+    <div class="tab-content" id="settings-tab" role="tabpanel" aria-labelledby="settings-tab-btn">
       <div class="settings-section">
         <h3>Link Behavior (Page Lock)</h3>
         <p class="settings-description">When Page Lock is enabled, these settings control what happens when you click links.</p>
@@ -64,7 +82,7 @@
                 <small>Open links in new tab</small>
               </div>
             </div>
-            <button id="toggleOpenInNewTab" class="btn-toggle" data-active="true">
+            <button id="toggleOpenInNewTab" class="btn-toggle" data-active="true" role="switch" aria-checked="true" aria-label="Toggle global default: open links in new tab">
               <span class="toggle-track">
                 <span class="toggle-thumb"></span>
               </span>
@@ -79,7 +97,7 @@
                 <small id="overrideStatus">Using global setting</small>
               </div>
             </div>
-            <button id="toggleTabOverride" class="btn-toggle" data-active="false">
+            <button id="toggleTabOverride" class="btn-toggle" data-active="false" role="switch" aria-checked="false" aria-label="Toggle per-tab override">
               <span class="toggle-track">
                 <span class="toggle-thumb"></span>
               </span>

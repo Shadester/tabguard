@@ -193,7 +193,9 @@ function updateTabIndicator(tabId) {
     chrome.action.setBadgeText({ tabId, text: '🔒' });
     chrome.action.setBadgeBackgroundColor({ tabId, color: '#FF0000' });
   } else {
+    // Clear the badge
     chrome.action.setBadgeText({ tabId, text: '' });
+    chrome.action.setBadgeBackgroundColor({ tabId, color: [0, 0, 0, 0] });
   }
 }
 
@@ -246,6 +248,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       tabLock: lock?.tabLock || false,
       openLinksInNewTab: lock?.openLinksInNewTab ?? null
     });
+  } else if (request.action === 'togglePageLock') {
+    // Handle toggle from content script (banner click)
+    const tabId = sender.tab?.id;
+    if (tabId) {
+      toggleLock(tabId, 'page', sender.tab.url);
+      sendResponse({ success: true });
+    }
+  } else if (request.action === 'unlockAllFromBanner') {
+    // Handle unlock from content script banner click
+    const tabId = sender.tab?.id;
+    if (tabId) {
+      unlockTab(tabId);
+      sendResponse({ success: true });
+    }
   } else if (request.action === 'unlockAll') {
     unlockTab(request.tabId);
     sendResponse({ pageLock: false, tabLock: false, openLinksInNewTab: null });
@@ -314,4 +330,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
   }
   return true;
+});
+
+// Handle keyboard shortcuts
+chrome.commands.onCommand.addListener((command) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0]) {
+      const tab = tabs[0];
+      if (command === 'togglePageLock') {
+        toggleLock(tab.id, 'page', tab.url);
+      } else if (command === 'toggleTabLock') {
+        toggleLock(tab.id, 'tab', tab.url);
+      }
+    }
+  });
 });
