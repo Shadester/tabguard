@@ -84,10 +84,9 @@ The popup has two tabs:
 
 ### On-Page Indicator
 When Page Lock is active:
-- A blue banner appears at the top: "🔒 Page Locked - Click to unlock"
-- Click the banner to open the extension popup
-- Click the "−" button to minimize it to a corner icon
-- Click the minimized icon to expand it again
+- A small blue lock icon (🔒) appears in the top-right corner
+- Hover for tooltip: "Page Locked - Click to unlock"
+- Click the icon to unlock all locks (both Page and Tab)
 
 ## How It Works
 
