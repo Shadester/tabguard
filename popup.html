@@ -11,41 +11,83 @@
 
     <button id="lockBoth" class="btn btn-lock-both">🔒⛔ Lock Both</button>
 
-    <div class="divider">or individually:</div>
+    <div class="tabs">
+      <button class="tab-button active" data-tab="locks">Locks</button>
+      <button class="tab-button" data-tab="settings">Settings</button>
+    </div>
 
-    <div class="lock-controls">
-      <div class="lock-item">
-        <div class="lock-info">
-          <span class="lock-icon">🔒</span>
-          <div class="lock-text">
-            <strong>Page Lock</strong>
-            <small>Prevents navigation</small>
+    <div class="tab-content active" id="locks-tab">
+      <div class="lock-controls">
+        <div class="lock-item">
+          <div class="lock-info">
+            <span class="lock-icon">🔒</span>
+            <div class="lock-text">
+              <strong>Page Lock</strong>
+              <small>Prevents navigation</small>
+            </div>
           </div>
+          <button id="togglePageLock" class="btn-toggle" data-active="false">
+            <span class="toggle-track">
+              <span class="toggle-thumb"></span>
+            </span>
+          </button>
         </div>
-        <button id="togglePageLock" class="btn-toggle" data-active="false">
-          <span class="toggle-track">
-            <span class="toggle-thumb"></span>
-          </span>
-        </button>
-      </div>
 
-      <div class="lock-item">
-        <div class="lock-info">
-          <span class="lock-icon">⛔</span>
-          <div class="lock-text">
-            <strong>Tab Lock</strong>
-            <small>Prevents closing</small>
+        <div class="lock-item">
+          <div class="lock-info">
+            <span class="lock-icon">⛔</span>
+            <div class="lock-text">
+              <strong>Tab Lock</strong>
+              <small>Prevents closing</small>
+            </div>
           </div>
+          <button id="toggleTabLock" class="btn-toggle" data-active="false">
+            <span class="toggle-track">
+              <span class="toggle-thumb"></span>
+            </span>
+          </button>
         </div>
-        <button id="toggleTabLock" class="btn-toggle" data-active="false">
-          <span class="toggle-track">
-            <span class="toggle-thumb"></span>
-          </span>
-        </button>
       </div>
     </div>
 
-    <button id="unlockAll" class="btn btn-unlock-all">Unlock All</button>
+    <div class="tab-content" id="settings-tab">
+      <div class="settings-section">
+        <h3>Link Behavior (Page Lock)</h3>
+        <p class="settings-description">When Page Lock is enabled, these settings control what happens when you click links.</p>
+
+        <div class="lock-controls">
+          <div class="lock-item">
+            <div class="lock-info">
+              <span class="lock-icon">🌐</span>
+              <div class="lock-text">
+                <strong>Global Default</strong>
+                <small>Open links in new tab</small>
+              </div>
+            </div>
+            <button id="toggleOpenInNewTab" class="btn-toggle" data-active="true">
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </button>
+          </div>
+
+          <div class="lock-item">
+            <div class="lock-info">
+              <span class="lock-icon">📌</span>
+              <div class="lock-text">
+                <strong>Override for This Tab</strong>
+                <small id="overrideStatus">Using global setting</small>
+              </div>
+            </div>
+            <button id="toggleTabOverride" class="btn-toggle" data-active="false">
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <script src="popup.js"></script>
 </body>

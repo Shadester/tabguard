@@ -17,6 +17,33 @@ h2 {
   color: #333;
 }
 
+
+.divider {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 30%;
+  height: 1px;
+  background: #ddd;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
 .btn-lock-both {
   width: 100%;
   padding: 14px 16px;
@@ -45,30 +72,58 @@ h2 {
   background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
 }
 
-.divider {
-  text-align: center;
-  font-size: 12px;
-  color: #999;
-  margin-bottom: 12px;
-  position: relative;
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 16px;
 }
 
-.divider::before,
-.divider::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 30%;
-  height: 1px;
-  background: #ddd;
+.tab-button {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
 }
 
-.divider::before {
-  left: 0;
+.tab-button:hover {
+  color: #333;
+  background: #f5f5f5;
 }
 
-.divider::after {
-  right: 0;
+.tab-button.active {
+  color: #3498db;
+  border-bottom-color: #3498db;
+  font-weight: 600;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.settings-section h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.settings-description {
+  margin: 0 0 16px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #666;
 }
 
 .lock-controls {
@@ -156,24 +211,4 @@ h2 {
   transform: translateX(20px);
 }
 
-.btn-unlock-all {
-  width: 100%;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  background-color: #e74c3c;
-  color: white;
-  transition: background-color 0.2s;
-}
 
-.btn-unlock-all:hover {
-  background-color: #c0392b;
-}
-
-.btn-unlock-all:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
