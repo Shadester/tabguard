@@ -32,12 +32,18 @@ jobs:
           # Update version in manifest.json
           sed -i 's/"version": "[^"]*"/"version": "'"$VERSION"'"/' manifest.json
 
-          # Commit the change
+          # Commit the change only if there are changes
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add manifest.json
-          git commit -m "Bump version to $VERSION"
-          git push
+
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "Version already up to date at $VERSION"
+          else
+            git commit -m "Bump version to $VERSION"
+            git push
+          fi
 
       - name: Create release package
         run: |
