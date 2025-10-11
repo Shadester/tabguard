@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TabGuard",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Guard your tabs from closing or navigating away from the current page",
   "permissions": [
     "tabs",

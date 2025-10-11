@@ -1,17 +1,11 @@
-// Storage structure: { tabId: { pageLock: boolean, tabLock: boolean, url: string, openLinksInNewTab: boolean | null } }
-// openLinksInNewTab: null = use global setting, true/false = override
+// Storage structure: { tabId: { pageLock: boolean, tabLock: boolean, url: string } }
 let lockedTabs = {};
 // Track pending reopened tabs to restore lock state
 let pendingReopenedTabs = new Map(); // url -> lock state
-// Global settings
-let settings = {
-  openLinksInNewTab: true // Default to opening links in new tab
-};
 
-// Load locked tabs and settings from storage on startup
-chrome.storage.local.get(['lockedTabs', 'settings'], (result) => {
+// Load locked tabs from storage on startup
+chrome.storage.local.get(['lockedTabs'], (result) => {
   lockedTabs = result.lockedTabs || {};
-  settings = result.settings || { openLinksInNewTab: true };
 });
 
 // Create context menus on install
@@ -140,7 +134,7 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 
 function toggleLock(tabId, lockType, url) {
   if (!lockedTabs[tabId]) {
-    lockedTabs[tabId] = { pageLock: false, tabLock: false, url, openLinksInNewTab: null };
+    lockedTabs[tabId] = { pageLock: false, tabLock: false, url };
   }
 
   if (lockType === 'page') {
@@ -151,8 +145,8 @@ function toggleLock(tabId, lockType, url) {
     lockedTabs[tabId].tabLock = !lockedTabs[tabId].tabLock;
   }
 
-  // Remove entry if both locks are off and no override is set
-  if (!lockedTabs[tabId].pageLock && !lockedTabs[tabId].tabLock && lockedTabs[tabId].openLinksInNewTab === null) {
+  // Remove entry if both locks are off
+  if (!lockedTabs[tabId].pageLock && !lockedTabs[tabId].tabLock) {
     delete lockedTabs[tabId];
     removeTabTitlePrefix(tabId);
   } else {
@@ -213,8 +207,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const lock = lockedTabs[request.tabId];
     sendResponse({
       pageLock: lock?.pageLock || false,
-      tabLock: lock?.tabLock || false,
-      openLinksInNewTab: lock?.openLinksInNewTab ?? null
+      tabLock: lock?.tabLock || false
     });
   } else if (request.action === 'lockBoth') {
     // Lock both or unlock both (toggle)
@@ -224,11 +217,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (bothLocked) {
       // Unlock both
       unlockTab(request.tabId);
-      sendResponse({ pageLock: false, tabLock: false, openLinksInNewTab: null });
+      sendResponse({ pageLock: false, tabLock: false });
     } else {
       // Lock both
       if (!lockedTabs[request.tabId]) {
-        lockedTabs[request.tabId] = { pageLock: false, tabLock: false, url: request.url, openLinksInNewTab: null };
+        lockedTabs[request.tabId] = { pageLock: false, tabLock: false, url: request.url };
       }
       lockedTabs[request.tabId].pageLock = true;
       lockedTabs[request.tabId].tabLock = true;
@@ -238,15 +231,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       updateTabIndicator(request.tabId);
       updateTabTitle(request.tabId, lockedTabs[request.tabId]);
       notifyContentScript(request.tabId, true);
-      sendResponse({ pageLock: true, tabLock: true, openLinksInNewTab: lockedTabs[request.tabId].openLinksInNewTab });
+      sendResponse({ pageLock: true, tabLock: true });
     }
   } else if (request.action === 'toggleLock') {
     toggleLock(request.tabId, request.lockType, request.url);
     const lock = lockedTabs[request.tabId];
     sendResponse({
       pageLock: lock?.pageLock || false,
-      tabLock: lock?.tabLock || false,
-      openLinksInNewTab: lock?.openLinksInNewTab ?? null
+      tabLock: lock?.tabLock || false
     });
   } else if (request.action === 'togglePageLock') {
     // Handle toggle from content script (banner click)
@@ -264,70 +256,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
   } else if (request.action === 'unlockAll') {
     unlockTab(request.tabId);
-    sendResponse({ pageLock: false, tabLock: false, openLinksInNewTab: null });
+    sendResponse({ pageLock: false, tabLock: false });
   } else if (request.action === 'checkPageLock') {
     // Content script checking if page is locked
     const tabId = sender.tab?.id;
     const lock = lockedTabs[tabId];
-    const effectiveOpenLinksInNewTab = lock?.openLinksInNewTab ?? settings.openLinksInNewTab;
     sendResponse({
-      pageLock: lock?.pageLock || false,
-      openLinksInNewTab: effectiveOpenLinksInNewTab
+      pageLock: lock?.pageLock || false
     });
-  } else if (request.action === 'getSettings') {
-    sendResponse(settings);
-  } else if (request.action === 'updateSettings') {
-    if (request.tabId !== undefined) {
-      // Per-tab override
-      if (!lockedTabs[request.tabId]) {
-        lockedTabs[request.tabId] = { pageLock: false, tabLock: false, url: request.url, openLinksInNewTab: null };
-      }
-
-      const newOverrideValue = request.settings.openLinksInNewTab;
-      lockedTabs[request.tabId].openLinksInNewTab = newOverrideValue;
-
-      // Calculate effective value before potential cleanup
-      const effectiveValue = newOverrideValue ?? settings.openLinksInNewTab;
-
-      // Clean up if no locks and no override
-      if (!lockedTabs[request.tabId].pageLock && !lockedTabs[request.tabId].tabLock &&
-          lockedTabs[request.tabId].openLinksInNewTab === null) {
-        delete lockedTabs[request.tabId];
-      }
-
-      saveLocks();
-
-      // Notify this tab about the setting change
-      chrome.tabs.sendMessage(request.tabId, {
-        action: 'settingsUpdated',
-        settings: { openLinksInNewTab: effectiveValue }
-      }).catch(() => {
-        // Ignore errors if content script not ready
-      });
-
-      sendResponse({
-        openLinksInNewTab: newOverrideValue,
-        effectiveValue: effectiveValue
-      });
-    } else {
-      // Global setting
-      settings = { ...settings, ...request.settings };
-      chrome.storage.local.set({ settings });
-      // Notify all tabs about the setting change
-      chrome.tabs.query({}, (tabs) => {
-        tabs.forEach(tab => {
-          const lock = lockedTabs[tab.id];
-          const effectiveValue = lock?.openLinksInNewTab ?? settings.openLinksInNewTab;
-          chrome.tabs.sendMessage(tab.id, {
-            action: 'settingsUpdated',
-            settings: { openLinksInNewTab: effectiveValue }
-          }).catch(() => {
-            // Ignore errors if content script not ready
-          });
-        });
-      });
-      sendResponse(settings);
-    }
   }
   return true;
 });

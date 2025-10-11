@@ -29,81 +29,35 @@
 
     <button id="lockBoth" class="btn btn-lock-both" aria-label="Lock both page and tab">🔒⛔ Lock Both</button>
 
-    <div class="tabs" role="tablist" aria-label="Main navigation">
-      <button class="tab-button active" role="tab" aria-selected="true" aria-controls="locks-tab" data-tab="locks" id="locks-tab-btn">Locks</button>
-      <button class="tab-button" role="tab" aria-selected="false" aria-controls="settings-tab" data-tab="settings" id="settings-tab-btn">Settings</button>
-    </div>
-
-    <div class="tab-content active" id="locks-tab" role="tabpanel" aria-labelledby="locks-tab-btn">
-      <div class="lock-controls">
-        <div class="lock-item">
-          <div class="lock-info">
-            <span class="lock-icon">🔒</span>
-            <div class="lock-text">
-              <strong>Page Lock</strong>
-              <small>Prevents navigation</small>
-            </div>
+    <div class="lock-controls">
+      <div class="lock-item">
+        <div class="lock-info">
+          <span class="lock-icon">🔒</span>
+          <div class="lock-text">
+            <strong>Page Lock</strong>
+            <small>Prevents navigation, opens links in new tabs</small>
           </div>
-          <button id="togglePageLock" class="btn-toggle" data-active="false" role="switch" aria-checked="false" aria-label="Toggle Page Lock">
-            <span class="toggle-track">
-              <span class="toggle-thumb"></span>
-            </span>
-          </button>
         </div>
-
-        <div class="lock-item">
-          <div class="lock-info">
-            <span class="lock-icon">⛔</span>
-            <div class="lock-text">
-              <strong>Tab Lock</strong>
-              <small>Prevents closing</small>
-            </div>
-          </div>
-          <button id="toggleTabLock" class="btn-toggle" data-active="false" role="switch" aria-checked="false" aria-label="Toggle Tab Lock">
-            <span class="toggle-track">
-              <span class="toggle-thumb"></span>
-            </span>
-          </button>
-        </div>
+        <button id="togglePageLock" class="btn-toggle" data-active="false" role="switch" aria-checked="false" aria-label="Toggle Page Lock">
+          <span class="toggle-track">
+            <span class="toggle-thumb"></span>
+          </span>
+        </button>
       </div>
-    </div>
 
-    <div class="tab-content" id="settings-tab" role="tabpanel" aria-labelledby="settings-tab-btn">
-      <div class="settings-section">
-        <h3>Link Behavior (Page Lock)</h3>
-        <p class="settings-description">When Page Lock is enabled, these settings control what happens when you click links.</p>
-
-        <div class="lock-controls">
-          <div class="lock-item">
-            <div class="lock-info">
-              <span class="lock-icon">🌐</span>
-              <div class="lock-text">
-                <strong>Global Default</strong>
-                <small>Open links in new tab</small>
-              </div>
-            </div>
-            <button id="toggleOpenInNewTab" class="btn-toggle" data-active="true" role="switch" aria-checked="true" aria-label="Toggle global default: open links in new tab">
-              <span class="toggle-track">
-                <span class="toggle-thumb"></span>
-              </span>
-            </button>
-          </div>
-
-          <div class="lock-item">
-            <div class="lock-info">
-              <span class="lock-icon">📌</span>
-              <div class="lock-text">
-                <strong>Override for This Tab</strong>
-                <small id="overrideStatus">Using global setting</small>
-              </div>
-            </div>
-            <button id="toggleTabOverride" class="btn-toggle" data-active="false" role="switch" aria-checked="false" aria-label="Toggle per-tab override">
-              <span class="toggle-track">
-                <span class="toggle-thumb"></span>
-              </span>
-            </button>
+      <div class="lock-item">
+        <div class="lock-info">
+          <span class="lock-icon">⛔</span>
+          <div class="lock-text">
+            <strong>Tab Lock</strong>
+            <small>Prevents closing</small>
           </div>
         </div>
+        <button id="toggleTabLock" class="btn-toggle" data-active="false" role="switch" aria-checked="false" aria-label="Toggle Tab Lock">
+          <span class="toggle-track">
+            <span class="toggle-thumb"></span>
+          </span>
+        </button>
       </div>
     </div>
   </div>

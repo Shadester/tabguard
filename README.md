@@ -9,24 +9,15 @@ Guard your tabs from closing or navigating away from the current page.
 - **🔒 Page Lock** - Prevents navigation away from the current URL
   - Allows same-page hash changes (anchor links)
   - Visual on-page indicator when active
-  - Optional: Open blocked links in new tabs
+  - Automatically opens blocked links in new tabs
 - **⛔ Tab Lock** - Prevents closing the tab
   - Reopens immediately if closed
   - Preserves lock state across reopens
 
-### Link Behavior Settings
-- **Global Default** - Control whether links open in new tabs when Page Lock is enabled
-  - Default: ON (opens links in new tabs)
-  - When OFF: Blocks navigation completely
-- **Per-Tab Override** - Customize link behavior for individual tabs
-  - Toggle to override the global setting for just this tab
-  - Shows current effective behavior
-
 ### Additional Features
-- **Tabbed Interface** - Clean separation of Locks and Settings
 - **Visual Indicators**
   - 🔒 badge on extension icon when any lock is active
-  - On-page banner when Page Lock is enabled (minimizable)
+  - On-page banner when Page Lock is enabled
 - **Right-click menu** - Quick access to toggle locks from context menu
 - **Persistent** - Lock states saved across browser restarts
 - **Keyboard Shortcuts** - Quick access via keyboard (see below)
@@ -62,16 +53,10 @@ Then follow step 2 above.
 
 ### Via Popup (Click Extension Icon)
 
-The popup has two tabs:
-
-**Locks Tab** - Main controls
+Main controls:
 - **Lock Both** button - Lock/unlock both Page and Tab simultaneously
-- **Page Lock** toggle - Prevents navigation only
+- **Page Lock** toggle - Prevents navigation only (opens blocked links in new tabs)
 - **Tab Lock** toggle - Prevents closing only
-
-**Settings Tab** - Link behavior (Page Lock only)
-- **Global Default** - Control whether blocked links open in new tabs (affects all tabs)
-- **Override for This Tab** - Customize behavior for just the current tab
 
 ### Via Right-Click Menu
 1. Right-click anywhere on the page
@@ -93,7 +78,7 @@ When Page Lock is active:
 - **Page Lock**:
   - Intercepts navigation events and redirects back to the locked URL
   - Same-page hash navigation is allowed
-  - Optionally opens blocked links in new tabs
+  - Automatically opens blocked links in new tabs
   - Visual on-page banner for clear feedback
 - **Tab Lock**:
   - Detects tab close events and immediately reopens the tab
@@ -111,8 +96,8 @@ When Page Lock is active:
 - Some websites may prevent the extension from working (e.g., chrome:// pages)
 
 ### Links still navigate away
-- Check Settings tab - "Global Default" should be ON if you want links to open in new tabs
 - Make sure you're clicking regular links (not form submissions or JavaScript events)
+- Blocked links should automatically open in new tabs
 
 ### Tab Lock reopens in wrong position
 - This is a browser limitation - reopened tabs appear at the end
